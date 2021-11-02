@@ -22,7 +22,7 @@ import { strings } from '@douyinfe/semi-foundation/table/constants';
 import Store from '@douyinfe/semi-foundation/utils/Store';
 
 import BaseComponent, { BaseProps } from '../../_base/baseComponent';
-import { measureScrollbar, logger } from '../utils';
+import { logger } from '../utils';
 import ColGroup from '../ColGroup';
 import BaseRow from './BaseRow';
 import ExpandedRow from './ExpandedRow';
@@ -289,12 +289,11 @@ class Body extends BaseComponent<BodyProps, BodyState> {
 
     getVirtualizedRowWidth = () => {
         const { getCellWidths } = this.context;
-        const { columns, anyColumnFixed } = this.props;
+        const { columns } = this.props;
         const cellWidths = getCellWidths(columns);
-        const measuredScrollbarWidth = measureScrollbar('vertical');
         const rowWidth = arrayAdd(cellWidths, 0, size(columns));
 
-        return !anyColumnFixed && measuredScrollbarWidth ? rowWidth - measuredScrollbarWidth : rowWidth;
+        return rowWidth;
     };
 
     renderVirtualizedRow = (options: { index?: number; style?: React.CSSProperties; isScrolling?: boolean }) => {
@@ -396,8 +395,6 @@ class Body extends BaseComponent<BodyProps, BodyState> {
             return null;
         }
 
-        const measuredScrollbarWidth = measureScrollbar('vertical');
-
         const rawY = get(scroll, 'y');
         const yIsNumber = typeof rawY === 'number';
         const y = yIsNumber ? rawY : 600;
@@ -409,8 +406,8 @@ class Body extends BaseComponent<BodyProps, BodyState> {
         const listStyle = {
             width: '100%',
             height: y,
-            overflowX: anyColumnFixed ? 'scroll' : 'auto',
-            overflowY: measuredScrollbarWidth ? 'scroll' : 'auto',
+            overflowX: 'auto',
+            overflowY: 'auto',
         } as const;
 
         const wrapCls = classnames(`${prefixCls}-body`);
@@ -433,6 +430,7 @@ class Body extends BaseComponent<BodyProps, BodyState> {
                 innerElementType={this.renderTbody}
                 outerElementType={this.renderOuter}
                 style={{ ...listStyle, direction }}
+                direction={direction}
             >
                 {this.renderVirtualizedRow}
             </List>
