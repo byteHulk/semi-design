@@ -8,9 +8,8 @@ import Portal from '../_portal';
 import LocaleConsumer from '../locale/localeConsumer';
 import cls from 'classnames';
 import PropTypes from 'prop-types';
-import { isUndefined } from 'lodash-es';
+import { isUndefined, noop } from 'lodash';
 import '@douyinfe/semi-foundation/modal/modal.scss';
-import { noop } from 'lodash-es';
 import ContentTransition from './ModalTransition';
 import BaseComponent from '../_base/baseComponent';
 import confirm, {
